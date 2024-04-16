@@ -18,7 +18,13 @@
 
 <body>
 
+    {% if messages %}
+    {% for message in messages %}
+     {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
 
+    {% endfor %}
+
+{% endif %}
        
 
           
@@ -49,9 +55,7 @@
                             color: red;
                           }
                         </style>
-                        {% for message in messages %}
-                        <h5>{{message}}</h5>
-                        {% endfor %}
+                        
                       </div>
                     <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
                     <form action="" method="POST" enctype="multipart/form-data">
