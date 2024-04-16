@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'favicon.png' %}" rel="icon" type="image/png">
-    <title>Home</title>
+    <title>Home - {{request.user|title}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
@@ -30,7 +30,7 @@
 
             <header class="w-full">
                 <div class="header_inner w-full flex justify-between items-center">
-                    <p>Social Connect</p>
+                    <a href="" style="font-family: 'Arial', sans-serif; font-size: 24px; font-weight: bold;">Social Connect</a>
                     <div class="flex space-x-2 items-center">
                         <form action="/search" class="mr-4" style="margin-right: 60px;" method="POST">
                             {% csrf_token %}
@@ -87,7 +87,7 @@
                                             <div>
                                                 <input type="file" name="image_upload">
                                                 <!-- <a href="#" class="button soft-warning small"> Choose file</a> -->
-                                                <textarea class="button soft-warning small" name="caption" placeholder="caption..." ></textarea>
+                                                <textarea class="button soft-warning small" name="caption" placeholder="Write Caption Here..." ></textarea>
                                                 <br>
                                                 <button class="button bg-blue-700" type="submit" >Upload</button>
                                             </div>
@@ -222,7 +222,7 @@
                                     <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>
                                 </div>
                               <div>
-                                <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
+                                <!-- <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a> -->
                                 <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
                               
                                     <ul class="space-y-1">
@@ -237,7 +237,7 @@
                                           </a> 
                                       </li> -->
                                       <!-- <li> 
-                                          <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md ">
+                                          <a href="" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md ">
                                            <i class="uil-comment-slash mr-1"></i>   Disable comments
                                           </a> 
                                       </li>  -->
@@ -249,11 +249,11 @@
                                       <!-- <li>
                                         <hr class="-mx-2 my-2 ">
                                       </li> -->
-                                      <li> 
+                                      <!-- <li> 
                                           <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
                                            <i class="uil-trash-alt mr-1"></i>  Delete Post
                                           </a> 
-                                      </li>
+                                      </li> -->
                                     </ul>
                                 
                                 </div>
@@ -312,37 +312,29 @@
                                 <p>
                                     <a href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
                                 </p>
-
-                                <!-- <div class="border-t pt-4 space-y-4 ">
-                                    <div class="flex">
+                                
+                                    {% for comment in all_comments %}
+                                    <div>
                                         <div class="w-10 h-10 rounded-full relative flex-shrink-0">
-                                            <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt="" class="absolute h-full rounded-full w-full">
+                                            <img src="" alt="" class="absolute h-full rounded-full w-full">
                                         </div>
                                         <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 h-full relative lg:ml-5 ml-2 lg:mr-20   ">
-                                            <p class="leading-6">Y'all like billie eillish? <urna class="i uil-heart"></urna> <i
-                                                    class="uil-grin-tongue-wink"> </i> </p>
-                                            <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 "></div>
-                                        </div>
-                                    </div>
-                                    <div class="flex">
-                                        <div class="w-10 h-10 rounded-full relative flex-shrink-0">
-                                            <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt="" class="absolute h-full rounded-full w-full">
-                                        </div>
-                                        <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 h-full relative lg:ml-5 ml-2 lg:mr-20   ">
-                                            <p class="leading-6">She's my favourite <i class="uil-grin-tongue-wink-alt"></i>
+                                            <p class="leading-6">{{comment.username|title}} - {{comment.comment}} <i class="uil-grin-tongue-wink-alt"></i>
                                             </p>
                                             <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 "></div>
                                         </div>
                                     </div>
-                                </div> -->
+                                    {% endfor %}
 
-                                <!-- <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
-                                    <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
-                                    <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
-                                        <a href="#"> <i class="uil-image"></i></a>
-                                        <a href="#"> <i class="uil-video"></i></a>
+                                    
+
+                                <form action="/comment?post_id={{post.id}}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
+                                        <input type="text" placeholder="Write a comment" name="comment" class="bg-transparent max-h-10 shadow-none">
                                     </div>
-                                </div> -->
+                                </form>
+
     
                             </div>
     

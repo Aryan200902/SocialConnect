@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Profile,Post,LikePost,FollowersCount
+from .models import Profile,Post,LikePost,FollowersCount,CommentPost
 from itertools import chain
 import random
 
@@ -50,7 +50,7 @@ def index(request):
         username_profile_list.append(profile_lists)
     
     suggestions_username_profile_list = list(chain(*username_profile_list))
-    return render(request,'index.html', {'user_profile':user_profile, 'posts':feed_list, 'suggestions_username_profile_list': suggestions_username_profile_list})
+    return render(request,'index.html', {'user_profile':user_profile, 'posts':feed_list, 'suggestions_username_profile_list': suggestions_username_profile_list[:4]})
 
 @login_required(login_url='signin')
 def upload(request):
@@ -109,6 +109,24 @@ def like_post(request):
         post.save()
         return redirect('/')
 
+@login_required(login_url='signin')
+def comment(request):
+    post_id = request.GET.get('post_id')
+    if request.method == 'POST':
+        username = request.user.username
+        comment = request.POST['comment'] 
+        
+        new_comment = CommentPost.objects.create(post_id=post_id,username=username,comment=comment)
+        new_comment.save()
+        # all_comments = CommentPost.objects.filter(post_id=post_id).all()
+        # print(all_comments)
+        return redirect('/?post_id=' + str(post_id))
+    else:
+        all_comments = CommentPost.objects.filter(post_id=post_id).all()
+        final = list(chain(*all_comments))
+        print(final)
+    return render(request, 'index.html', {'all_comments': final})
+        
 @login_required(login_url='signin')
 def profile(request, pk):
     user_object = User.objects.get(username=pk)
