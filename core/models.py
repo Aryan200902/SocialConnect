@@ -34,7 +34,7 @@ class LikePost(models.Model):
         return self.username
 
 class CommentPost(models.Model):
-    post_id = models.CharField(max_length=500)
+    post_id = models.CharField(max_length=36,default='00000000-0000-0000-0000-000000000000')
     username = models.CharField(max_length=500)
     comment = models.TextField(max_length=500)
     

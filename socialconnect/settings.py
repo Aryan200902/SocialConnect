@@ -74,19 +74,19 @@ WSGI_APPLICATION = 'socialconnect.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # database_url = os.getenv("DATABASE_URL")
 # DATABASES['default']=dj_database_url.parse(database_url)
 
-DATABASE_URL = os.getenv('DATABASE_URL')
-DATABASES = {
-    'default': dj_database_url.config(),
-}
+# DATABASE_URL = os.getenv('DATABASE_URL')
+# DATABASES = {
+#     'default': dj_database_url.config(),
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -122,7 +122,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
 STATICFILES_DIR=(os.path.join(BASE_DIR,'static'),)
 # Default primary key field type

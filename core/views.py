@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
@@ -114,18 +114,20 @@ def comment(request):
     post_id = request.GET.get('post_id')
     if request.method == 'POST':
         username = request.user.username
-        comment = request.POST['comment'] 
-        
-        new_comment = CommentPost.objects.create(post_id=post_id,username=username,comment=comment)
+        comment = request.POST['comment']
+        print(comment)
+        new_comment=CommentPost.objects.create(post_id=post_id, username=username, comment=comment)
         new_comment.save()
-        # all_comments = CommentPost.objects.filter(post_id=post_id).all()
-        # print(all_comments)
         return redirect('/?post_id=' + str(post_id))
     else:
-        all_comments = CommentPost.objects.filter(post_id=post_id).all()
-        final = list(chain(*all_comments))
-        print(final)
-    return render(request, 'index.html', {'all_comments': final})
+        comments_list = []
+        all_comments = CommentPost.objects.filter(post_id=post_id)
+        
+        for comments in all_comments:
+            comments_list.append(comments.comment)
+        final_comment_list = list(chain(*comments_list))
+        print(final_comment_list)
+        return render(request, 'index.html', {'all_comments': final_comment_list})
         
 @login_required(login_url='signin')
 def profile(request, pk):
